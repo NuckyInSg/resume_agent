@@ -54,7 +54,7 @@ This project provides a FastAPI-based web service that converts PDF resumes to J
 
 2. Install dependencies:
    ```
-   pip install fastapi uvicorn python-multipart
+   pip install -r requirements.txt
    ```
 
 3. Ensure pdflatex is installed on your system.
