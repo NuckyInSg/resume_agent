@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Converter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        textarea {
+            width: 100%;
+            height: 400px;
+            margin-bottom: 10px;
+        }
+        #status {
+            margin-top: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Resume Converter</h1>
+    <div>
+        <h2>Original JSON</h2>
+        <form id="uploadForm">
+            <input type="file" id="resumeFile" accept=".pdf" required>
+            <button type="submit">Upload PDF</button>
+        </form>
+        <textarea id="originalJson" placeholder="Original JSON will appear here"></textarea>
+        <button id="generateButton">Generate PDF</button>
+    </div>
+    <div id="status"></div>
+
+    <script>
+        const uploadForm = document.getElementById('uploadForm');
+        const originalJson = document.getElementById('originalJson');
+        const generateButton = document.getElementById('generateButton');
+        const status = document.getElementById('status');
+
+        uploadForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData();
+            const fileInput = document.getElementById('resumeFile');
+            formData.append('file', fileInput.files[0]);
+
+            status.textContent = 'Uploading and converting PDF to JSON...';
+
+            try {
+                const response = await fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    const json = await response.json();
+                    originalJson.value = JSON.stringify(json, null, 2);
+                    status.textContent = 'PDF uploaded and converted to JSON successfully. Please review and edit the JSON if needed, then click "Generate PDF".';
+                } else {
+                    const error = await response.json();
+                    status.textContent = `Error: ${error.detail}`;
+                }
+            } catch (error) {
+                status.textContent = `Error: ${error.message}`;
+            }
+        });
+
+        generateButton.addEventListener('click', async () => {
+            status.textContent = 'Generating PDF from JSON...';
+
+            try {
+                const response = await fetch('/generate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: originalJson.value
+                });
+
+                if (response.ok) {
+                    const blob = await response.blob();
+                    if (blob.size === 0) {
+                        throw new Error('Received empty response from server');
+                    }
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'converted_resume.pdf';
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    status.textContent = 'PDF generated and downloaded successfully. You can upload another PDF or edit the JSON to generate a new PDF.';
+                } else {
+                    const errorText = await response.text();
+                    console.error('Server error:', errorText);
+                    status.textContent = `Error generating PDF: ${errorText}`;
+                }
+            } catch (error) {
+                console.error('Error generating PDF:', error);
+                status.textContent = `Error generating PDF: ${error.message}`;
+            }
+        });
+    </script>
+</body>
+</html>
