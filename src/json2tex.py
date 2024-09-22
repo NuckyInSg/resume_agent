@@ -70,45 +70,52 @@ def generate_latex(data):
         latex += r"""  \resumeSubHeadingListEnd
 
 
-%-----------PROJECTS-----------------
+"""
+
+    if data.get('projects'):
+        projects = data['projects']
+        if projects:  # Check if the projects list is not empty
+            latex += r"""%-----------PROJECTS-----------------
 \section{Projects}
   \resumeSubHeadingListStart
 """
+            for project in projects:
+                latex += f"    \\resumeSubItem{{{project['title']}}}\n"
+                latex += f"      {{{project['description']}}}\n"
 
-    if data['projects']:
-        for project in data['projects']:
-            latex += f"    \\resumeSubItem{{{project['title']}}}\n"
-            latex += f"      {{{project['description']}}}\n"
+            latex += r"  \resumeSubHeadingListEnd" + "\n\n"
 
-        latex += r"""  \resumeSubHeadingListEnd
-
-%-----------ACADEMIC EXPERIENCE-----------------
+    if data.get('academic_experience'):
+        academic_experiences = data['academic_experience']
+        if academic_experiences:
+            latex += r"""%-----------ACADEMIC EXPERIENCE-----------------
 \section{Academic Experience}
   \resumeSubHeadingListStart
 """
+            for academic_exp in academic_experiences:
+                latex += f"    \\resumeSubItem{{{academic_exp['title']}}}\n"
+                latex += f"      {{{academic_exp['description']}}}\n"
 
-    if data['academic_experience']:
-        for academic_exp in data['academic_experience']:
-            latex += f"    \\resumeSubItem{{{academic_exp['title']}}}\n"
-            latex += f"      {{{academic_exp['description']}}}\n"
+            latex += r"  \resumeSubHeadingListEnd" + "\n\n"
 
-        latex += r"""  \resumeSubHeadingListEnd
-
-%
-%--------PROGRAMMING SKILLS------------
+    if data.get('skills'):
+        skills = data['skills']
+        if skills:
+            latex += r"""%---------PROGRAMMING SKILLS------------
 \section{Programming Skills}
  \resumeSubHeadingListStart
    \item{
 """
-    if data['skills'].get('languages') or data['skills'].get('technologies'):
-        if data['skills'].get('languages'):
-            latex += r"     \textbf{Languages}{: " + ", ".join(data['skills']['languages']) + r"}"
-        if data['skills'].get('technologies'):
-            latex += r"" + "\n" + r"     \hfill" + "\n" + r"     \textbf{Technologies}{: " + ", ".join(data['skills']['technologies']) + r"}"
-        latex += r"""
+            if skills.get('languages'):
+                latex += r"     \textbf{Languages}{: " + ", ".join(skills['languages']) + r"}"
+            if skills.get('technologies'):
+                latex += r"" + "\n" + r"     \hfill" + "\n" + r"     \textbf{Technologies}{: " + ", ".join(skills['technologies']) + r"}"
+            latex += r"""
    }
  \resumeSubHeadingListEnd
+"""
 
+    latex += r"""
 %-------------------------------------------
 \end{document}
 """
