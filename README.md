@@ -16,12 +16,40 @@ This project provides a FastAPI-based web service that converts PDF resumes to J
 - FastAPI
 - pdflatex
 
+### Installing pdflatex
+
+#### macOS:
+1. Install MacTeX (full TeX Live distribution):
+   ```
+   brew install --cask mactex
+   ```
+   Or for a smaller installation, use BasicTeX:
+   ```
+   brew install --cask basictex
+   ```
+
+2. After installation, make sure to add the LaTeX binaries to your PATH:
+   ```
+   export PATH="/Library/TeX/texbin:$PATH"
+   ```
+
+#### Linux (Ubuntu/Debian):
+1. Install TeX Live:
+   ```
+   sudo apt-get update
+   sudo apt-get install texlive-full
+   ```
+   For a minimal installation:
+   ```
+   sudo apt-get install texlive-latex-base
+   ```
+
 ## 🛠️ Installation
 
 1. Clone the repository:
    ```
-   git clone <repository-url>
-   cd <project-directory>
+   git clone https://github.com/NuckyInSg/resume_agent
+   cd resume_agent
    ```
 
 2. Install dependencies:
