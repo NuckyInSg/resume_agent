@@ -16,35 +16,30 @@ This project provides a FastAPI-based web service that converts PDF resumes to J
 - FastAPI
 - pdflatex
 
-### Installing pdflatex
+## 🛠️ Installation and Usage
 
-#### macOS:
-1. Install MacTeX (full TeX Live distribution):
+### Using Docker
+
+1. Clone the repository:
    ```
-   brew install --cask mactex
-   ```
-   Or for a smaller installation, use BasicTeX:
-   ```
-   brew install --cask basictex
+   git clone https://github.com/NuckyInSg/resume_agent
+   cd resume_agent
    ```
 
-2. After installation, make sure to add the LaTeX binaries to your PATH:
+2. Set environment variables:
    ```
-   export PATH="/Library/TeX/texbin:$PATH"
-   ```
-
-#### Linux (Ubuntu/Debian):
-1. Install TeX Live:
-   ```
-   sudo apt-get update
-   sudo apt-get install texlive-full
-   ```
-   For a minimal installation:
-   ```
-   sudo apt-get install texlive-latex-base
+   export ANTHROPIC_API_KEY="your_actual_api_key"
+   export ANTHROPIC_API_URL="your_actual_api_url"
    ```
 
-## 🛠️ Installation
+3. Build and run the Docker container:
+   ```
+   ./build.sh
+   ```
+
+4. Access the web interface at `http://localhost:8000`
+
+### Manual Installation
 
 1. Clone the repository:
    ```
@@ -57,18 +52,20 @@ This project provides a FastAPI-based web service that converts PDF resumes to J
    pip install -r requirements.txt
    ```
 
-3. Ensure pdflatex is installed on your system.
+3. Install pdflatex on your system.
 
-## Usage
-
-1. Start the server:
+4. Start the server:
    ```
    python main.py
    ```
 
-2. Access the web interface at `http://localhost:8000`
+5. Access the web interface at `http://localhost:8000`
 
-3. Upload a PDF file, edit the JSON data if needed, and generate the new PDF.
+## Usage
+
+1. Upload a PDF file
+2. Edit the JSON data if needed
+3. Generate the new PDF
 
 ## 🔗 API Endpoints
 
