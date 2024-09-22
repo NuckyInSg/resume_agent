@@ -42,8 +42,6 @@ This project provides a FastAPI-based web service that converts PDF resumes to J
 
 3. Upload a PDF file, edit the JSON data if needed, and generate the new PDF.
 
-![Web Interface Screenshot](path/to/screenshot.jpg)
-
 ## 🔗 API Endpoints
 
 - `POST /upload`: Upload a PDF file
