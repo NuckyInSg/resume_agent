@@ -53,6 +53,14 @@ This project provides a FastAPI-based web service that converts PDF resumes to J
    ```
 
 3. Install pdflatex on your system.
+   ```
+   # macOS
+   brew install --cask basictex
+   # Linux
+   sudo apt-get install texlive-full
+   
+   export PATH="/Library/TeX/texbin:$PATH"
+   ```
 
 4. Start the server:
    ```
