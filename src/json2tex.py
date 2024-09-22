@@ -85,6 +85,27 @@ def generate_latex(data):
 
             latex += r"  \resumeSubHeadingListEnd" + "\n\n"
 
+    if data.get('awards'):
+        awards = data['awards']
+        if awards:
+            latex += r"""%-----------AWARDS-----------------
+\section{Awards}
+  \resumeSubHeadingListStart
+"""
+            for award in awards:
+                latex += f"    \\resumeSubItem{{{award['title']}}}\n"
+                latex += f"      {{{award['description']}}}\n"
+
+            latex += r"  \resumeSubHeadingListEnd" + "\n\n"
+
+    if data.get('professional_summary'):
+        professional_summary = data['professional_summary']
+        if professional_summary:
+            latex += r"""%-----------SELF SUMMARY-----------------
+\section{Self Summary}
+"""
+            latex += f"  {professional_summary}\n\n"
+
     if data.get('academic_experience'):
         academic_experiences = data['academic_experience']
         if academic_experiences:

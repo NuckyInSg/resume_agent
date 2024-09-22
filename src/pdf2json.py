@@ -52,6 +52,7 @@ Follow these steps to extract and structure the information:
   "contact": {{
     "email": "not nullable",
     "mobile": "not nullable",
+    "address": "nullable",
     "website": "nullable"
   }},
   "education": [
@@ -92,7 +93,14 @@ Follow these steps to extract and structure the information:
   "skills": {{
     "languages": ["up to 5 languages"],
     "technologies": ["up to 5 technologies, 40 characters total"]
-  }}
+  }},
+  "awards": [
+    {{
+      "title": "not nullable",
+      "description": "not nullable"
+    }}
+  ],
+  "professional_summary": "nullable"
 }}
 
 7. Review the extracted information to ensure accuracy and completeness, the json content will be used for latex pdf generation, Handle special characters with escaping, such as &, %, $, #, _, {{, }}, ~, ^, \, |, <, >, and ensure they are properly escaped.
@@ -108,7 +116,7 @@ def create_resume_extraction_chain():
     if not anthropic_api_key:
         raise ValueError("ANTHROPIC_API_KEY environment variable is not set")
     
-    llm = ChatAnthropic(model="claude-3-5-sonnet-20240620", temperature=0, anthropic_api_key=anthropic_api_key, anthropic_api_url=anthropic_api_url)
+    llm = ChatAnthropic(model="claude-3-5-sonnet-20240620", temperature=0, anthropic_api_key=anthropic_api_key, anthropic_api_url=anthropic_api_url, max_tokens=4096)
 
     prompt = ChatPromptTemplate.from_template(PROMPT_TEMPLATE)
 
