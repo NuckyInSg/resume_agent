@@ -1,5 +1,4 @@
-# 🚀 PDF to JSON to LaTeX Converter
-
+# 🚀 Resume Agent
 This project provides a FastAPI-based web service that converts PDF resumes to JSON, then to LaTeX format, and finally generates a new PDF.
 
 ## 🌟 Features
