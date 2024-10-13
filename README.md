@@ -33,7 +33,7 @@ This project provides a FastAPI-based web service that converts PDF resumes to J
 
 3. Build and run the Docker container:
    ```
-   ./build.sh
+   chmod +x build.sh && ./build.sh
    ```
 
 4. Access the web interface at `http://localhost:8000`
