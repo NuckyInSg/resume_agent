@@ -121,7 +121,12 @@ def generate_latex(data):
 
     if data.get('skills'):
         skills = data['skills']
-        if skills:
+        num_languages, num_technologies = 0, 0
+        if skills.get('languages'):
+            num_languages = len(skills['languages'])
+        if skills.get('technologies'):
+            num_technologies = len(skills['technologies'])
+        if skills and (num_languages > 0 or num_technologies > 0):
             latex += r"""%---------PROGRAMMING SKILLS------------
 \section{Programming Skills}
  \resumeSubHeadingListStart
