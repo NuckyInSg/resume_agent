@@ -32,6 +32,10 @@ OUTPUT_TEX = os.path.join(OUTPUT_DIR, "output.tex")
 OUTPUT_PDF = os.path.join(OUTPUT_DIR, "output.pdf")
 HEADER_TEX = "src/header_eng.tex"
 
+@app.get("/health")
+async def health_check():
+    return {"status": "healthy"}
+
 @app.post("/upload")
 async def upload_file(file: UploadFile = File(...)):
     try:
