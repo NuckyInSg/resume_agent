@@ -20,12 +20,12 @@ jobs:
       run: |
         echo "$PEM_KEY" > web-ec2.pem
         chmod 600 web-ec2.pem
-        ssh -o StrictHostKeyChecking=no -i web-ec2.pem ${USER}@${HOST} '
+        ssh -o StrictHostKeyChecking=no -i web-ec2.pem ${USER}@${HOST} "
           cd resume_agent &&
           git pull origin main &&
           chmod +x build.sh &&
-          export ANTHROPIC_API_KEY=${ANTHROPIC_KEY} &&
-          export ANTHROPIC_API_URL=${ANTHROPIC_URL} &&
+          export ANTHROPIC_API_KEY='${ANTHROPIC_KEY}' &&
+          export ANTHROPIC_API_URL='${ANTHROPIC_URL}' &&
           bash build.sh
-        '
+        "
         rm -f web-ec2.pem
