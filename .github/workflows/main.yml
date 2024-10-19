@@ -18,7 +18,6 @@ jobs:
         ANTHROPIC_URL: ${{ secrets.ANTHROPIC_URL }}
         ANTHROPIC_KEY: ${{ secrets.ANTHROPIC_KEY }}
       run: |
-        echo $HOST
         echo "$PEM_KEY" > web-ec2.pem
         chmod 600 web-ec2.pem
         ssh -o StrictHostKeyChecking=no -i web-ec2.pem ${USER}@${HOST} '
