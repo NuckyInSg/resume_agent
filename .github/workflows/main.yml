@@ -1,0 +1,31 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Deploy to EC2
+      env:
+        PEM_KEY: ${{ secrets.AWS_EC2_PEM_KEY }}
+        HOST: ${{ secrets.AWS_EC2_HOST }}
+        USER: ${{ secrets.AWS_EC2_USERNAME }}
+        ANTHROPIC_URL: ${{ secrets.ANTHROPIC_URL }}
+        ANTHROPIC_KEY: ${{ secrets.ANTHROPIC_KEY }}
+      run: |
+        echo "$PEM_KEY" > web-ec2.pem
+        chmod 600 web-ec2.pem
+        ssh -o StrictHostKeyChecking=no -i web-ec2.pem ${USER}@${HOST} '
+          cd resume_agent &&
+          git pull origin main &&
+          sed -i '1a\
+          export ANTHROPIC_API_KEY=${ANTHROPIC_KEY}\
+          export ANTHROPIC_API_URL=${ANTHROPIC_URL}' build.sh &&
+          bash build.sh
+        '
+        rm -f web-ec2.pem
