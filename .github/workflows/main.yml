@@ -24,9 +24,8 @@ jobs:
           cd resume_agent &&
           git pull origin main &&
           chmod +x build.sh &&
-          sed -i '1a\
-          export ANTHROPIC_API_KEY=${ANTHROPIC_KEY}\
-          export ANTHROPIC_API_URL=${ANTHROPIC_URL}' build.sh &&
+          export ANTHROPIC_API_KEY=${ANTHROPIC_KEY} &&
+          export ANTHROPIC_API_URL=${ANTHROPIC_URL} &&
           bash build.sh
         '
         rm -f web-ec2.pem
