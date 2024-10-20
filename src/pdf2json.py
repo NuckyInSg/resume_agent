@@ -91,7 +91,7 @@ Follow these steps to extract and structure the information:
     }}
   ],
   "skills": {{
-    "languages": ["up to 5 languages"],
+    "languages": ["up to 3 languages"],
     "technologies": ["up to 5 technologies, 40 characters total"]
   }},
   "awards": [

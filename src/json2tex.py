@@ -1,6 +1,6 @@
 import json
 
-def generate_latex(data):
+def generate_heading(data):
     latex = r"""
 \begin{document}
 
@@ -23,124 +23,170 @@ def generate_latex(data):
 
     latex += r"""
 \end{tabular*}
+"""
+    return latex
 
+def generate_education(education_data):
+    latex = r"""
 %-----------EDUCATION-----------------
 \section{Education}
   \resumeSubHeadingListStart
 """
+    for edu in education_data:
+        latex += r"    \resumeSubheading"
+        if edu.get('institution'):
+            latex += r"{" + edu['institution'] + r"}"
+        if edu.get('location'):
+            latex += r"{" + edu['location'] + r"}"
+        latex += "\n      "
+        if edu.get('degree'):
+            latex += r"{" + edu['degree']
+            if edu.get('gpa'):
+                latex += r";  GPA: " + edu['gpa']
+            latex += r"}"
+        if edu.get('duration'):
+            latex += r"{" + edu['duration'] + r"}"
+        latex += "\n"
 
-    if data['education']:
-        for edu in data['education']:
-            latex += r"    \resumeSubheading"
-            if edu.get('institution'):
-                latex += r"{" + edu['institution'] + r"}"
-            if edu.get('location'):
-                latex += r"{" + edu['location'] + r"}"
-            latex += "\n      "
-            if edu.get('degree'):
-                latex += r"{" + edu['degree']
-                if edu.get('gpa'):
-                    latex += r";  GPA: " + edu['gpa']
-                latex += r"}"
-            if edu.get('duration'):
-                latex += r"{" + edu['duration'] + r"}"
-            latex += "\n"
+    latex += r"  \resumeSubHeadingListEnd"
+    return latex
 
-        latex += r"""  \resumeSubHeadingListEnd
-
-
+def generate_experience(experience_data):
+    latex = r"""
 %-----------EXPERIENCE-----------------
 \section{Experience}
   \resumeSubHeadingListStart
-
 """
-
-    if data['experience']:
-        for exp in data['experience']:
-            latex += f"""    \\resumeSubheading
+    for exp in experience_data:
+        latex += f"""    \\resumeSubheading
       {{{exp['company']}}}{{{exp['location']}}}
       {{{exp['position']}}}{{{exp['duration']}}}
       \\resumeItemListStart
 """
-            for project in exp['projects']:
-                latex += f"        \\resumeItem{{{project['title']}}}\n"
-                latex += f"          {{{project['description']}}}\n"
-            latex += r"      \resumeItemListEnd" + "\n\n"
+        for project in exp['projects']:
+            latex += f"        \\resumeItem{{{project['title']}}}\n"
+            latex += f"          {{{project['description']}}}\n"
+        latex += r"      \resumeItemListEnd" + "\n\n"
 
-        latex += r"""  \resumeSubHeadingListEnd
+    latex += r"  \resumeSubHeadingListEnd"
+    return latex
 
-
-"""
-
-    if data.get('projects'):
-        projects = data['projects']
-        if projects:  # Check if the projects list is not empty
-            latex += r"""%-----------PROJECTS-----------------
+def generate_projects(projects_data):
+    if not projects_data:
+        return ""
+    
+    latex = r"""
+%-----------PROJECTS-----------------
 \section{Projects}
   \resumeSubHeadingListStart
 """
-            for project in projects:
-                latex += f"    \\resumeSubItem{{{project['title']}}}\n"
-                latex += f"      {{{project['description']}}}\n"
+    for project in projects_data:
+        latex += f"    \\resumeSubItem{{{project['title']}}}\n"
+        latex += f"      {{{project['description']}}}\n"
 
-            latex += r"  \resumeSubHeadingListEnd" + "\n\n"
+    latex += r"  \resumeSubHeadingListEnd"
+    return latex
 
-    if data.get('awards'):
-        awards = data['awards']
-        if awards:
-            latex += r"""%-----------AWARDS-----------------
-\section{Awards}
+def generate_professional_summary(summary_data):
+    if not summary_data:
+        return ""
+    
+    latex = r"""
+%-----------PROFESSIONAL SUMMARY-----------------
+\section{Professional Summary}
+"""
+    latex += summary_data + "\n"
+    return latex
+
+def generate_awards(awards_data):
+    if not awards_data:
+        return ""
+    
+    latex = r"""
+%-----------AWARDS-----------------
+\section{Awards \& Achievements}
   \resumeSubHeadingListStart
 """
-            for award in awards:
-                latex += f"    \\resumeSubItem{{{award['title']}}}\n"
-                latex += f"      {{{award['description']}}}\n"
+    for award in awards_data:
+        latex += f"    \\resumeSubItem{{{award['title']}}}\n"
+        if award.get('description'):
+            latex += f"      {{{award['description']}}}\n"
+    
+    latex += r"  \resumeSubHeadingListEnd"
+    return latex
 
-            latex += r"  \resumeSubHeadingListEnd" + "\n\n"
-
-    if data.get('professional_summary'):
-        professional_summary = data['professional_summary']
-        if professional_summary:
-            latex += r"""%-----------SELF SUMMARY-----------------
-\section{Self Summary}
-"""
-            latex += f"  {professional_summary}\n\n"
-
-    if data.get('academic_experience'):
-        academic_experiences = data['academic_experience']
-        if academic_experiences:
-            latex += r"""%-----------ACADEMIC EXPERIENCE-----------------
+def generate_academic_experience(academic_exp_data):
+    if not academic_exp_data:
+        return ""
+    
+    latex = r"""
+%-----------ACADEMIC EXPERIENCE-----------------
 \section{Academic Experience}
   \resumeSubHeadingListStart
 """
-            for academic_exp in academic_experiences:
-                latex += f"    \\resumeSubItem{{{academic_exp['title']}}}\n"
-                latex += f"      {{{academic_exp['description']}}}\n"
+    for exp in academic_exp_data:
+        latex += f"""    \\resumeSubheading
+      {{{exp['institution']}}}{{{exp['location']}}}
+      {{{exp['position']}}}{{{exp['duration']}}}
+      \\resumeItemListStart
+"""
+        for item in exp['responsibilities']:
+            latex += f"        \\resumeItem{{{item}}}\n"
+        latex += r"      \resumeItemListEnd" + "\n\n"
 
-            latex += r"  \resumeSubHeadingListEnd" + "\n\n"
+    latex += r"  \resumeSubHeadingListEnd"
+    return latex
 
-    if data.get('skills'):
-        skills = data['skills']
-        num_languages, num_technologies = 0, 0
-        if skills.get('languages'):
-            num_languages = len(skills['languages'])
-        if skills.get('technologies'):
-            num_technologies = len(skills['technologies'])
-        if skills and (num_languages > 0 or num_technologies > 0):
-            latex += r"""%---------PROGRAMMING SKILLS------------
+def generate_skills(skills_data):
+    if not skills_data:
+        return ""
+    
+    skills = skills_data
+    num_languages = len(skills.get('languages', []))
+    num_technologies = len(skills.get('technologies', []))
+    
+    latex = ""
+    if skills and (num_languages > 0 or num_technologies > 0):
+        latex += r"""
+%---------PROGRAMMING SKILLS------------
 \section{Programming Skills}
  \resumeSubHeadingListStart
    \item{
 """
-            if skills.get('languages'):
-                latex += r"     \textbf{Languages}{: " + ", ".join(skills['languages']) + r"}"
-            if skills.get('technologies'):
-                latex += r"" + "\n" + r"     \hfill" + "\n" + r"     \textbf{Technologies}{: " + ", ".join(skills['technologies']) + r"}"
-            latex += r"""
+        if skills.get('languages'):
+            latex += r"     \textbf{Languages}{: " + ", ".join(skills['languages']) + r"}"
+        if skills.get('technologies'):
+            latex += r"" + "\n" + r"     \hfill" + "\n" + r"     \textbf{Technologies}{: " + ", ".join(skills['technologies']) + r"}"
+        latex += r"""
    }
  \resumeSubHeadingListEnd
 """
+    return latex
 
+def generate_latex(data):
+    latex = generate_heading(data)
+
+    if data.get('education'):
+        latex += generate_education(data['education'])
+    
+    if data.get('experience'):
+        latex += generate_experience(data['experience'])
+    
+    if data.get('academic_experience'):
+        latex += generate_academic_experience(data['academic_experience'])
+    
+    if data.get('projects'):
+        latex += generate_projects(data['projects'])
+    
+    if data.get('awards'):
+        latex += generate_awards(data['awards'])
+    
+    if data.get('skills'):
+        latex += generate_skills(data['skills'])
+
+    if data.get('professional_summary'):
+        latex += generate_professional_summary(data['professional_summary'])
+    
     latex += r"""
 %-------------------------------------------
 \end{document}
